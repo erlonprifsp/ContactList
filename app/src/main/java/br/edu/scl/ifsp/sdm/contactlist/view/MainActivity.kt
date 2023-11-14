@@ -1,6 +1,7 @@
 package br.edu.scl.ifsp.sdm.contactlist.view // declara o pacote em que a classe MainActivity está localizada
 // a classe MainActivity está localizada no subpacote view do pacote br.edu.scl.ifsp.sdm.contactlist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity // importa a classe AppCompatActivity
 // AppCompatActivity é a classe base para todas as atividades do AppCompat, que são atividades que utilizam o tema do AppCompat
 import android.os.Bundle // importa a classe Bundle
@@ -32,6 +33,10 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
         super.onCreate(savedInstanceState) // chama o método onCreate() da classe pai AppCompatActivity
         setContentView(amb.root) // define o conteúdo da atividade para a raiz do layout vinculado à propriedade amb
 
+        //define um subtítulo para a activity
+        setSupportActionBar(amb.toolbarIn.toolbar)
+        supportActionBar?.subtitle = getString(R.string.contact_list)
+
         fillContacts() // chamada da função fillContacts()
 
         amb.contactsLv.adapter = contactAdapter // define o adaptador
@@ -47,6 +52,7 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
     override fun onOptionsItemSelected(item: MenuItem): Boolean { // função recebe como parâmetro o MenuItem que foi selecionado
        return when(item.itemId) { // usa uma expressão when como uma forma simplificada de if/else para verificar qual item foi clicado baseado no seu ID
            R.id.addContactMi -> { // se o item com ID addContactMi for clicado, a função retorna true
+               startActivity(Intent(this, ContactActivity::class.java))
                true
            }
            else -> { false }

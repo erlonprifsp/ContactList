@@ -22,5 +22,8 @@ class ContactActivity : AppCompatActivity() { // classe ContactActivity herda de
         setContentView(acb.root) // o root view da ActivityContactBinding é passado para setContentView
                                                         // diferentemente do primeiro caso, as views já estarão vinculadas à instância do binding, não sendo necessário encontrar por ID individualmente
 
+        //define um subtítulo para a activity
+        setSupportActionBar(acb.toolbarIn.toolbar)
+        supportActionBar?.subtitle = getString(R.string.contact_details)
     }
 }
