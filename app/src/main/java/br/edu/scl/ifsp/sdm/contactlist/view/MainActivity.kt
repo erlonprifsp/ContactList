@@ -4,7 +4,10 @@ package br.edu.scl.ifsp.sdm.contactlist.view // declara o pacote em que a classe
 import androidx.appcompat.app.AppCompatActivity // importa a classe AppCompatActivity
 // AppCompatActivity é a classe base para todas as atividades do AppCompat, que são atividades que utilizam o tema do AppCompat
 import android.os.Bundle // importa a classe Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
+import br.edu.scl.ifsp.sdm.contactlist.R // importa a classe R
 // A classe Bundle é uma classe que representa um conjunto de pares de chave-valor. Os bundles são frequentemente usados para armazenar dados que precisam ser passados entre atividades ou entre uma atividade e um fragmento
 import br.edu.scl.ifsp.sdm.contactlist.databinding.ActivityMainBinding
 import br.edu.scl.ifsp.sdm.contactlist.model.Contact
@@ -32,6 +35,22 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
         fillContacts() // chamada da função fillContacts()
 
         amb.contactsLv.adapter = contactAdapter // define o adaptador
+    }
+
+    // função onCreateOptionsMenu infla e adiciona o layout do menu pré-definido no xml para que ele possa ser exibido quando o usuário interagir com o menu de opções
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu) // carrega o layout do menu definido no arquivo menu_main.xml e adiciona os itens desse layout para o "menu" passado como parâmetro
+        return true // indica que a activity já se encarregou de criar o menu, então o framework Android não precisa tratar a criação do menu
+    }
+
+    // função onOptionsItemSelected é chamada sempre que o usuário seleciona um item do menu de opções
+    override fun onOptionsItemSelected(item: MenuItem): Boolean { // função recebe como parâmetro o MenuItem que foi selecionado
+       return when(item.itemId) { // usa uma expressão when como uma forma simplificada de if/else para verificar qual item foi clicado baseado no seu ID
+           R.id.addContactMi -> { // se o item com ID addContactMi for clicado, a função retorna true
+               true
+           }
+           else -> { false }
+       }
     }
 
     // função que preenche o data source
