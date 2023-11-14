@@ -8,9 +8,12 @@ import android.os.Bundle // importa a classe Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import br.edu.scl.ifsp.sdm.contactlist.R // importa a classe R
 // A classe Bundle é uma classe que representa um conjunto de pares de chave-valor. Os bundles são frequentemente usados para armazenar dados que precisam ser passados entre atividades ou entre uma atividade e um fragmento
 import br.edu.scl.ifsp.sdm.contactlist.databinding.ActivityMainBinding
+import br.edu.scl.ifsp.sdm.contactlist.model.Constant.EXTRA_CONTACT
 import br.edu.scl.ifsp.sdm.contactlist.model.Contact
 
 
@@ -29,6 +32,9 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
         ArrayAdapter(this, android.R.layout.simple_list_item_1, contactList.map{ it.toString() })
     }
 
+    // contactActivityResultLauncher
+    private lateinit var carl: ActivityResultLauncher<Intent> // carl é declarado como lateinit var, ou seja, sua inicialização é adiada para depois do método onCreate(), isso permite referenciar o carl sem necessariamente já tê-lo inicializado, o que é feito posteriormente
+
     override fun onCreate(savedInstanceState: Bundle?) { // este método é chamado quando a atividade é criada pela primeira vez
         super.onCreate(savedInstanceState) // chama o método onCreate() da classe pai AppCompatActivity
         setContentView(amb.root) // define o conteúdo da atividade para a raiz do layout vinculado à propriedade amb
@@ -36,6 +42,12 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
         //define um subtítulo para a activity
         setSupportActionBar(amb.toolbarIn.toolbar)
         supportActionBar?.subtitle = getString(R.string.contact_list)
+
+        carl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val contact =  result.data?.getParcelableExtra<Contact>(EXTRA_CONTACT)
+            }
+        }
 
         fillContacts() // chamada da função fillContacts()
 

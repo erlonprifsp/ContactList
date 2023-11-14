@@ -3,12 +3,13 @@ package br.edu.scl.ifsp.sdm.contactlist.model   // declara o pacote (package) ao
 
 // importam classes necessárias para a serialização do objeto
 import android.os.Parcelable // interface do Android que permite que objetos sejam serializados e desserializados de forma eficiente
+import br.edu.scl.ifsp.sdm.contactlist.model.Constant.INVALID_CONTACT_ID
 import kotlinx.parcelize.Parcelize // anotação do Kotlin usada para gerar automaticamente métodos necessários para a implementação da interface Parcelable
 
 @Parcelize // indica que a classe pode ser serializada/desserializada usando a interface Parcelable
 data class Contact(
     // atributos (propriedades) da classe Contact são declarados como variáveis mutáveis (var) e têm valores padrão definidos
-    var id: Int? = -1,
+    var id: Int? = INVALID_CONTACT_ID,
     var name: String = "",
     var address: String = "",
     var phone: String = "",
