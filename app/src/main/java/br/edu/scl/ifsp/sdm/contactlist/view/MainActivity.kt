@@ -43,9 +43,19 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
         setSupportActionBar(amb.toolbarIn.toolbar)
         supportActionBar?.subtitle = getString(R.string.contact_list)
 
+        // após a tela ContactActivity fechar, ela retorna um resultado
         carl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val contact =  result.data?.getParcelableExtra<Contact>(EXTRA_CONTACT)
+                contact?.also{// função lambda declarada dentro do escopo do also
+                    if(contactList.any{ it.id == contact.id }) { // verifica se o contato já existe na lista de contatos
+                        // editar o contato que já existe na lista
+                    } else {
+                        contactList.add(contact) // adiciona o contato
+                        contactAdapter.add(contact.toString()) // atualiza o Adapter
+                    }
+                    contactAdapter.notifyDataSetChanged() // atualiza o Adapter após a alteração no DataSource
+                }
             }
         }
 
@@ -64,7 +74,11 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
     override fun onOptionsItemSelected(item: MenuItem): Boolean { // função recebe como parâmetro o MenuItem que foi selecionado
        return when(item.itemId) { // usa uma expressão when como uma forma simplificada de if/else para verificar qual item foi clicado baseado no seu ID
            R.id.addContactMi -> { // se o item com ID addContactMi for clicado, a função retorna true
-               startActivity(Intent(this, ContactActivity::class.java))
+               // startActivity(Intent(this, ContactActivity::class.java)) // inicia uma nova activity sem tratar resultado
+               carl.launch(Intent(this, ContactActivity::class.java)) // usa um ActivityResultLauncher para disparar a activity
+               // a função launcher é útil quando se quer processar algum retorno da Activity
+               // já startActivity serve para simplesmente abrir outra tela sem se preocupar com o retorno
+
                true
            }
            else -> { false }
@@ -73,7 +87,7 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
 
     // função que preenche o data source
     private fun fillContacts() {
-        for (i in 1..50) {
+        for (i in 1..10) {
             contactList.add(
                 Contact(
                     i,
