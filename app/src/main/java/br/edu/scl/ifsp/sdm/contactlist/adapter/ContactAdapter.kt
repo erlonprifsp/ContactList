@@ -15,23 +15,30 @@ class ContactAdapter(context: Context, private val contactList: MutableList<Cont
 
     // sobrescreve o método getView para renderizar  a exibição do conteúdo da célula
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View { // método getView infla uma célula e atualiza o seu conteúdo
+
         val contact = contactList[position]
-        var tcb: TileContactBinding? = null
 
         var contactTileView = convertView
 
         // se o contactTileView é nulo
         if (contactTileView == null) {
-            tcb = TileContactBinding.inflate(
+            val tcb = TileContactBinding.inflate(
                 context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater,
                 parent,
                 false
             )
             contactTileView = tcb.root
+
+            val tileContactHolder = TileContactHolder(tcb.nameTv, tcb.emailTv)
+            contactTileView.tag = tileContactHolder
         }
-        contactTileView.findViewById<TextView>(R.id.nameTv).text = contact.name
+        val holder = contactTileView.tag as TileContactHolder
+        holder.nameTv.text = contact.name
+        holder.emailTv.text = contact.email
 
-        return super.getView(position, convertView, parent)
+        // contactTileView.findViewById<TextView>(R.id.nameTv).text = contact.name
+
+        return contactTileView
     }
-
+    private data class TileContactHolder(val nameTv: TextView, val emailTv: TextView)
 }
