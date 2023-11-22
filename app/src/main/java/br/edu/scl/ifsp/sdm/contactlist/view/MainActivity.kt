@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import br.edu.scl.ifsp.sdm.contactlist.R // importa a classe R
+import br.edu.scl.ifsp.sdm.contactlist.adapter.ContactAdapter
 // A classe Bundle é uma classe que representa um conjunto de pares de chave-valor. Os bundles são frequentemente usados para armazenar dados que precisam ser passados entre atividades ou entre uma atividade e um fragmento
 import br.edu.scl.ifsp.sdm.contactlist.databinding.ActivityMainBinding
 import br.edu.scl.ifsp.sdm.contactlist.model.Constant.EXTRA_CONTACT
@@ -28,8 +29,9 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
     private val contactList: MutableList<Contact> = mutableListOf()
 
     // Adapter
-    private val contactAdapter: ArrayAdapter<String> by lazy {
-        ArrayAdapter(this, android.R.layout.simple_list_item_1, contactList.map{ it.toString() })
+    // private val contactAdapter: ArrayAdapter<String> by lazy {
+    private val contactAdapter: ContactAdapter by lazy {
+        ContactAdapter(this, contactList)
     }
 
     // contactActivityResultLauncher
@@ -52,7 +54,7 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
                         // editar o contato que já existe na lista
                     } else {
                         contactList.add(contact) // adiciona o contato
-                        contactAdapter.add(contact.toString()) // atualiza o Adapter
+                        // contactAdapter.add(contact.toString()) // atualiza o Adapter
                     }
                     contactAdapter.notifyDataSetChanged() // atualiza o Adapter após a alteração no DataSource
                 }
