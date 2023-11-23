@@ -53,13 +53,18 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
         carl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val contact =  result.data?.getParcelableExtra<Contact>(EXTRA_CONTACT)
-                contact?.also{// função lambda declarada dentro do escopo do also
-                    if(contactList.any{ it.id == contact.id }) { // verifica se o contato já existe na lista de contatos
-                        // editar o contato que já existe na lista
+                contact?.also{ newOrEditedContact -> // função lambda declarada dentro do escopo do also
+                    if(contactList.any{ it.id == newOrEditedContact.id }) { // verifica se o contato já existe na lista de contatos
+
+                        // edita o contato que já existe na lista
+                        val position = contactList.indexOfFirst { it.id == newOrEditedContact.id } // pega a posição do contato na lista de células (view)
+                        contactList[position] = newOrEditedContact
                     } else {
-                        contactList.add(contact) // adiciona o contato
-                        // contactAdapter.add(contact.toString()) // atualiza o Adapter
+                        // contactList.add(contact) // adiciona o contato
+                        contactList.add(newOrEditedContact) // adiciona o contato
+
                     }
+                    // contactAdapter.add(contact.toString()) // atualiza o Adapter
                     contactAdapter.notifyDataSetChanged() // atualiza o Adapter após a alteração no DataSource
                 }
             }
