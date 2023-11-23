@@ -14,8 +14,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
 import br.edu.scl.ifsp.sdm.contactlist.R // importa a classe R
 import br.edu.scl.ifsp.sdm.contactlist.adapter.ContactAdapter
+import br.edu.scl.ifsp.sdm.contactlist.adapter.ContactRvAdapter
 // A classe Bundle é uma classe que representa um conjunto de pares de chave-valor. Os bundles são frequentemente usados para armazenar dados que precisam ser passados entre atividades ou entre uma atividade e um fragmento
 import br.edu.scl.ifsp.sdm.contactlist.databinding.ActivityMainBinding
 import br.edu.scl.ifsp.sdm.contactlist.model.Constant.EXTRA_CONTACT
@@ -35,8 +37,11 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
 
     // Adapter
     // private val contactAdapter: ArrayAdapter<String> by lazy {
-    private val contactAdapter: ContactAdapter by lazy {
-        ContactAdapter(this, contactList)
+
+    // private val contactAdapter: ContactAdapter by lazy {
+    private val contactAdapter: ContactRvAdapter by lazy {
+        // ContactAdapter(this, contactList)
+        ContactRvAdapter(contactList)
     }
 
     // contactActivityResultLauncher
@@ -73,13 +78,18 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
 
         fillContacts() // chamada da função fillContacts()
 
-        amb.contactsLv.adapter = contactAdapter // define o adaptador
+        // amb.contactsLv.adapter = contactAdapter // define o adaptador
 
-        // associa a activity principal com o menu de opção de clique LONGO
-        registerForContextMenu(amb.contactsLv)
+        amb.contactsRv.adapter = contactAdapter // define o adaptador
+        amb.contactsRv.layoutManager = LinearLayoutManager(this)
+
+        // menu de contexto
+        // registerForContextMenu(amb.contactsLv) // associa a activity principal com o menu de opção de clique LONGO
 
         // listener para verificar se ocorreu um clique CURTO
         // amb.contactsLv.setOnItemClickListener { parent, view, position, id ->
+
+        /*
         amb.contactsLv.setOnItemClickListener { _, _, position, _ ->
 
             // val contact = contactList[position]
@@ -92,6 +102,9 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
                 putExtra(EXTRA_VIEW_CONTACT, true)
             })
         }
+        */
+
+
     }
 
     // função onCreateOptionsMenu infla e adiciona o layout do menu pré-definido no xml para que ele possa ser exibido quando o usuário interagir com o menu de opções
@@ -152,7 +165,7 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterForContextMenu(amb.contactsLv) // remove a associação com o menu de opção de clique longo
+        // unregisterForContextMenu(amb.contactsLv) // remove a associação com o menu de opção de clique longo
     }
 
     // função que preenche o data source
