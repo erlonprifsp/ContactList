@@ -9,7 +9,9 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView.AdapterContextMenuInfo
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import br.edu.scl.ifsp.sdm.contactlist.R // importa a classe R
@@ -102,11 +104,25 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
+        val position = (item.menuInfo as AdapterContextMenuInfo).position // converte para AdapterContextMenuInfo e pega a posição da célula (view)
+
         return when(item.itemId) {
             R.id.removeContactMi -> {
+                contactList.removeAt(position)
+                contactAdapter.notifyDataSetChanged()
+                Toast.makeText(this, getString(R.string.contact_removed), Toast.LENGTH_SHORT).show()
                 true
             }
             R.id.editContactMi -> {
+                // val contact = contactList[position] // pega o contato baseado na posição da célula (view)
+                //val editContactIntent = Intent(this, ContactActivity::class.java) // cria uma intent
+                //editContactIntent.putExtra(EXTRA_CONTACT, contact) //armazena os dados do contato na variável EXTRA_CONTACT
+                //carl.launch(editContactIntent) // envia os dados para outra activity
+
+                carl.launch(Intent(this, ContactActivity::class.java).apply {
+                    putExtra(EXTRA_CONTACT, contactList[position])
+                })
+
                 true
             }
             else -> { false }

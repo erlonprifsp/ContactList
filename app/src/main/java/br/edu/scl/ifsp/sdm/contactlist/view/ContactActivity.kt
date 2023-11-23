@@ -29,13 +29,24 @@ class ContactActivity : AppCompatActivity() { // classe ContactActivity herda de
         setSupportActionBar(acb.toolbarIn.toolbar)
         supportActionBar?.subtitle = getString(R.string.contact_details)
 
+        val receivedContact = intent.getParcelableExtra< Contact>(EXTRA_CONTACT)
+        receivedContact?.let { received ->
+            with(acb) {
+                nameEt.setText(received.name)
+                addressEt.setText(received.address)
+                phoneEt.setText(received.phone)
+                emailEt.setText(received.email)
+            }
+        }
+
         // listener para o botão saveBt do ActivityContactBinding (acb)
         with(acb) {
             saveBt.setOnClickListener {
 
                 // cria um objeto chamado contact para armazenar os dados informados pelo usuário
                 val contact = Contact(
-                    id = hashCode(), // retorna um inteiro
+                    // id = hashCode(), // gera um inteiro aleatório, caso seja um novo contato
+                    id = receivedContact?.id?:hashCode(),   // usada para atribuir um valor à variável id --> se a variável receivedContact tiver um valor, o valor do atributo id dessa variável será atribuído a id. Caso contrário, o valor do hashcode da variável id será atribuído a id.
                     name = nameEt.text.toString(),
                     address = addressEt.text.toString(),
                     phone = phoneEt.text.toString(),
