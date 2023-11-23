@@ -5,8 +5,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity // importa a classe AppCompatActivity
 // AppCompatActivity é a classe base para todas as atividades do AppCompat, que são atividades que utilizam o tema do AppCompat
 import android.os.Bundle // importa a classe Bundle
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -64,6 +66,9 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
         fillContacts() // chamada da função fillContacts()
 
         amb.contactsLv.adapter = contactAdapter // define o adaptador
+
+        // associa a activity principal com o menu de opção de clique longo
+        registerForContextMenu(amb.contactsLv)
     }
 
     // função onCreateOptionsMenu infla e adiciona o layout do menu pré-definido no xml para que ele possa ser exibido quando o usuário interagir com o menu de opções
@@ -85,6 +90,32 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
            }
            else -> { false }
        }
+    }
+
+    // exibe menu de opção após clique longo
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        menuInflater.inflate(R.menu.context_menu_main, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.removeContactMi -> {
+                true
+            }
+            R.id.editContactMi -> {
+                true
+            }
+            else -> { false }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterForContextMenu(amb.contactsLv) // remove a associação com o menu de opção de clique longo
     }
 
     // função que preenche o data source

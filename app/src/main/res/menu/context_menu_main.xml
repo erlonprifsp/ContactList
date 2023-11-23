@@ -5,6 +5,8 @@
         android:id="@+id/removeContactMi"
         android:title="@string/remove_contact" />
 
-    <!-- PAREI AQUI -> 2:07 -->
+    <item
+        android:id="@+id/editContactMi"
+        android:title="@string/edit_contact" />
 
 </menu>
