@@ -21,11 +21,25 @@ class ContactRvAdapter(private val contactList: MutableList<Contact>, private va
             // cria para cada célula um menu de contexto
             tileContactBinding.root.apply {
                 setOnCreateContextMenuListener { menu, _, _ ->
+
+                    // infla o menu de contexto
                     (onContactClickListener as AppCompatActivity).menuInflater.inflate(R.menu.context_menu_main, menu)
+
+                    // opção para remover a célula
                     menu.findItem(R.id.removeContactMi).setOnMenuItemClickListener {
                         onContactClickListener.onRemoveContactMenuItemClick(adapterPosition)
                         true
                     }
+
+                    // opção para editar a célula
+                    menu.findItem(R.id.editContactMi).setOnMenuItemClickListener {
+                        onContactClickListener.onEditContactMenuItemClick(adapterPosition)
+                        true
+                    }
+
+                }
+                setOnClickListener {
+                    onContactClickListener.onContactClick(adapterPosition)
                 }
             }
         }
@@ -54,9 +68,9 @@ class ContactRvAdapter(private val contactList: MutableList<Contact>, private va
                 nameTv.text = contact.name
                 emailTv.text = contact.email
                 phoneTv.text = contact.phone
-                itemView.setOnClickListener {
-                    onContactClickListener.onContactClick(position)
-                }
+                // itemView.setOnClickListener {
+                //    onContactClickListener.onContactClick(position)
+                // }
             }
         }
     }
