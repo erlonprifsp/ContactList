@@ -26,7 +26,7 @@ import br.edu.scl.ifsp.sdm.contactlist.model.Contact
 
 
 
-class MainActivity : AppCompatActivity() { // declara a classe MainActivity como uma subclasse da classe AppCompatActivity, com isso, ela herdará todos os métodos e membros da classe AppCompatActivity
+class MainActivity : AppCompatActivity(), OnContactClickListener { // declara a classe MainActivity como uma subclasse da classe AppCompatActivity, com isso, ela herdará todos os métodos e membros da classe AppCompatActivity
     private val amb: ActivityMainBinding by lazy { // declara uma variável privada chamada amb do tipo ActivityMainBinding
         // A expressão de delegação by lazy garante que a propriedade amb seja inicializada apenas quando for acessada pela primeira vez
         ActivityMainBinding.inflate(layoutInflater) // infla o layout activity_main.xml na memória e retorná-lo como uma instância da classe ActivityMainBinding
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
     // private val contactAdapter: ContactAdapter by lazy {
     private val contactAdapter: ContactRvAdapter by lazy {
         // ContactAdapter(this, contactList)
-        ContactRvAdapter(contactList)
+        ContactRvAdapter(contactList, this)
     }
 
     // contactActivityResultLauncher
@@ -166,6 +166,15 @@ class MainActivity : AppCompatActivity() { // declara a classe MainActivity como
     override fun onDestroy() {
         super.onDestroy()
         // unregisterForContextMenu(amb.contactsLv) // remove a associação com o menu de opção de clique longo
+    }
+
+    override fun onContactClick(position: Int) {
+        Intent(this, ContactActivity::class.java).apply {
+            putExtra(EXTRA_CONTACT, contactList[position])
+            putExtra(EXTRA_VIEW_CONTACT, true)
+        }.also {
+            startActivity(it)
+        }
     }
 
     // função que preenche o data source
