@@ -65,13 +65,15 @@ class MainActivity : AppCompatActivity(), OnContactClickListener { // declara a 
                         // edita o contato que já existe na lista
                         val position = contactList.indexOfFirst { it.id == newOrEditedContact.id } // pega a posição do contato na lista de células (view)
                         contactList[position] = newOrEditedContact
+                        contactAdapter.notifyItemChanged(position)
                     } else {
                         // contactList.add(contact) // adiciona o contato
                         contactList.add(newOrEditedContact) // adiciona o contato
+                        contactAdapter.notifyItemInserted(contactList.lastIndex)
 
                     }
                     // contactAdapter.add(contact.toString()) // atualiza o Adapter
-                    contactAdapter.notifyDataSetChanged() // atualiza o Adapter após a alteração no DataSource
+                    // contactAdapter.notifyDataSetChanged() // atualiza o Adapter após a alteração no DataSource
                 }
             }
         }
@@ -128,6 +130,8 @@ class MainActivity : AppCompatActivity(), OnContactClickListener { // declara a 
        }
     }
 
+    /*
+
     // exibe menu de opção após clique longo
     override fun onCreateContextMenu(
         menu: ContextMenu?,
@@ -137,6 +141,22 @@ class MainActivity : AppCompatActivity(), OnContactClickListener { // declara a 
         menuInflater.inflate(R.menu.context_menu_main, menu)
     }
 
+    */
+
+    override fun onRemoveContactMenuItemClick(position: Int) {
+        contactList.removeAt(position)
+        contactAdapter.notifyItemRemoved(position)
+        Toast.makeText(this, getString(R.string.contact_removed), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onEditContactMenuItemClick(position: Int) {
+        carl.launch(Intent(this, ContactActivity::class.java).apply {
+            putExtra(EXTRA_CONTACT, contactList[position])
+        })
+    }
+
+    /*
+
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val position = (item.menuInfo as AdapterContextMenuInfo).position // converte para AdapterContextMenuInfo e pega a posição da célula (view)
 
@@ -145,6 +165,7 @@ class MainActivity : AppCompatActivity(), OnContactClickListener { // declara a 
                 contactList.removeAt(position)
                 contactAdapter.notifyDataSetChanged()
                 Toast.makeText(this, getString(R.string.contact_removed), Toast.LENGTH_SHORT).show()
+
                 true
             }
             R.id.editContactMi -> {
@@ -162,6 +183,8 @@ class MainActivity : AppCompatActivity(), OnContactClickListener { // declara a 
             else -> { false }
         }
     }
+
+    */
 
     override fun onDestroy() {
         super.onDestroy()
